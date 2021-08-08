@@ -7,7 +7,7 @@ public class FileShow {
 	
 	public static void main(String[] args) {
 		
-		String folderPath ="소스경로";//ex)C:\\eclipse-workspace
+		String folderPath ="C:\\Users\\JEONGINSEOP\\Documents\\Douzone";//ex)C:\\eclipse-workspace
 		File files = new File(folderPath);
 		
 		String[] pptFiles = {};//ex){"file1","file2"}

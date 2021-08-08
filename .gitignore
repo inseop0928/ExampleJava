@@ -66,4 +66,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+
+#etc
+.settings/
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,java,java-web,code-java
