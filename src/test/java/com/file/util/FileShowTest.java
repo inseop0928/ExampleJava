@@ -12,11 +12,17 @@ public class FileShowTest {
 
     FileSearch fileSearch = null;
 
+    FileCopy fileCopy = null;
+
 
     @Before
     public void beforeTest(){
         if(fileSearch == null){
             fileSearch = new FileSearch();
+        }
+
+        if(fileCopy == null){
+            fileCopy = new FileCopy();
         }
     }
 
@@ -32,5 +38,22 @@ public class FileShowTest {
             e.printStackTrace();
         }
     }
+
+
+    @Test
+    public void copy(){
+        String sourceFile ="C:\\Users\\userName\\Desktop\\Å×½ºÆ®.txt";//ex)C:\\eclipse-workspace
+        String targetDir ="C:\\Users\\userName\\NEW";//ex)C:\\eclipse-workspace
+        File file = new File(sourceFile);
+
+        try {
+            fileCopy.newFile(file,targetDir);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
 
 }

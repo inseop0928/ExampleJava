@@ -51,6 +51,8 @@ public class FileSearch {
 			while((line = bufferedReader.readLine())!=null){
 				logger.info(line);
 			}
+			bufferedReader.close();
+			inputStream.close();
 			logger.info("-------------------------END-------------------------------");
 		}
 	}
