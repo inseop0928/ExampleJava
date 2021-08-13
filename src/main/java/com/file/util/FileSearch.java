@@ -5,14 +5,32 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
 
 public class FileSearch {
 
 	Logger logger = Logger.getLogger(this.getClass());
 	Class<?> firstClass = this.getClass();
+	
+	private List<File> files = null;
+	
+	public FileSearch(){
+		
+		if(files == null) {
+			files = new ArrayList<File>();
+		}
+	}
+	
+	public List<File> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<File> files) {
+		this.files = files;
+	}
 	
 	public void search(File dirPath) throws Exception {
 		
@@ -27,7 +45,8 @@ public class FileSearch {
 
 			if (!file.isDirectory()) {
 				System.out.println(file.getAbsolutePath());
-				fileContentSearch(file);
+				//fileContentSearch(file);
+				files.add(file);
 			} else {
 				Method method = this.getClass().getDeclaredMethod("search", file.getClass());
 				method.invoke(this, file);
@@ -35,7 +54,7 @@ public class FileSearch {
 		}
 	}
 
-	public void fileContentSearch(File targetFile) throws Exception{
+	public void fileContentShow(File targetFile) throws Exception{
 		//targetFile.canRead();
 
 		if(targetFile == null || !targetFile.isFile()){
@@ -43,17 +62,45 @@ public class FileSearch {
 		}
 
 		if(targetFile.isFile()){
+			//파일을 바이트 단위로 데이터를 읽음
 			FileInputStream inputStream = new FileInputStream(targetFile);
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-			logger.info("-------------------------START-----------------------------");
+			//InputStreamReader reader=new InputStreamReader(inputStream,"UTF-8");
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+			
+			logger.info("----------------------"+targetFile.getName()+" START-----------------------------");
 			String line;
+			StringBuffer sbf = new StringBuffer();
+			long num = 1;
 			while((line = bufferedReader.readLine())!=null){
-				logger.info(line);
+				
+				//sbf.append(line+System.getProperty("line.separator"));
+				sbf.append(num + ":" + line+"\n");
+				num++;
 			}
+			//logger.info(sbf.toString());
+			
+		
 			bufferedReader.close();
 			inputStream.close();
 			logger.info("-------------------------END-------------------------------");
 		}
+	}
+	
+	public void fileContentSearch(String searchTxt,String fileContent) throws Exception{
+		String srchText = "</script>"; 
+
+		long fromIdx = 1;
+		
+		if(fileContent.indexOf(srchText)>=0) {
+			
+			//logger.info(targetFile.getName());
+			logger.info(fileContent.length());
+			logger.info(fileContent.indexOf(srchText));
+			
+			logger.info(srchText.length());
+			
+			fromIdx = fileContent.indexOf(srchText);
+		}
+		
 	}
 }

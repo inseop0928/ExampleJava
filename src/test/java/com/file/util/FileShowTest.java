@@ -26,21 +26,43 @@ public class FileShowTest {
         }
     }
 
-    @Test
+    //@Test
     public void search(){
         String folderPath ="경로설정";//ex)C:\\eclipse-workspace
         File files = new File(folderPath);
 
         try {
             fileSearch.search(files);
+            
+           
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
+    
+    //@Test
+    public void shoWContent() {
+    	
+    	String folderPath ="C:\\Users\\user\\Desktop\\NEW_OS";//ex)C:\\eclipse-workspace
+        File files = new File(folderPath);
 
+        try {
+            fileSearch.search(files);
+            
+            for(File file :fileSearch.getFiles()) {
+        		//fileCopy.newFile(file,targetDir);
+            	fileSearch.fileContentShow(file);
+        	}
+           
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    	
+    }
 
-    @Test
+    //@Test
     public void copy(){
         String sourceFile ="C:\\Users\\userName\\Desktop\\테스트.txt";//ex)C:\\eclipse-workspace
         String targetDir ="C:\\Users\\userName\\NEW";//ex)C:\\eclipse-workspace
@@ -54,6 +76,25 @@ public class FileShowTest {
         }
 
     }
+    
 
+    @Test
+    public void allCopy(){
+        String sourceDir ="D:\\50.코드\\10.본사코드\\douzone-gpd-extends-ui\\view\\OS";//ex)C:\\eclipse-workspace
+        String targetDir ="C:\\Users\\user\\Desktop\\NEW_OS";//ex)C:\\eclipse-workspace
+        File sourceFile = new File(sourceDir);
 
+        try {
+        	
+        	fileSearch.search(sourceFile);
+        	
+        	for(File file :fileSearch.getFiles()) {
+        		fileCopy.newFile(file,targetDir);
+        	}
+        	
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }
