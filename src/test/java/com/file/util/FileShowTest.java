@@ -1,6 +1,7 @@
 package com.file.util;
 
 import com.web.crawling.WebCrawling;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,10 +11,10 @@ import static org.junit.Assert.*;
 
 public class FileShowTest {
 
+    Logger log = Logger.getLogger(this.getClass());
+
     FileSearch fileSearch = null;
-
     FileCopy fileCopy = null;
-
 
     @Before
     public void beforeTest(){
@@ -33,11 +34,10 @@ public class FileShowTest {
 
         try {
             fileSearch.search(files);
-            
-           
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
     
@@ -51,13 +51,13 @@ public class FileShowTest {
             fileSearch.search(files);
             
             for(File file :fileSearch.getFiles()) {
-        		//fileCopy.newFile(file,targetDir);
-            	fileSearch.fileContentShow(file);
+        		fileSearch.fileContentShow(file);
         	}
            
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            log.error(e.getMessage());
         }
     	
     }
@@ -73,15 +73,34 @@ public class FileShowTest {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            log.error(e.getMessage());
         }
 
     }
-    
+
+    @Test
+    public void fileContentTxtSrch(){
+        String sourceDir ="경로";//ex)C:\\eclipse-workspace
+        String searchText ="단어";//ex)C:\\eclipse-workspace
+        File sourceFile = new File(sourceDir);
+
+        try {
+            fileSearch.search(sourceFile);
+
+            for(File file :fileSearch.getFiles()) {
+                fileSearch.fileContentTxtSrch(file, searchText,0);
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+    }
 
     @Test
     public void allCopy(){
-        String sourceDir ="D:\\50.코드\\10.본사코드\\douzone-gpd-extends-ui\\view\\OS";//ex)C:\\eclipse-workspace
-        String targetDir ="C:\\Users\\user\\Desktop\\NEW_OS";//ex)C:\\eclipse-workspace
+        String sourceDir ="원본경로";//ex)C:\\eclipse-workspace
+        String targetDir ="대상경로";//ex)C:\\eclipse-workspace
         File sourceFile = new File(sourceDir);
 
         try {
@@ -95,6 +114,7 @@ public class FileShowTest {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 }

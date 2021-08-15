@@ -16,7 +16,7 @@ public class FileSearch {
 	Class<?> firstClass = this.getClass();
 	
 	private List<File> files = null;
-	
+
 	public FileSearch(){
 		
 		if(files == null) {
@@ -48,59 +48,84 @@ public class FileSearch {
 				//fileContentSearch(file);
 				files.add(file);
 			} else {
+				//폴더일 경우 재귀호출
 				Method method = this.getClass().getDeclaredMethod("search", file.getClass());
 				method.invoke(this, file);
 			}
 		}
 	}
 
+	private String fileContent(File targetFile) throws Exception{
+		//targetFile.canRead();
+		//파일을 바이트 단위로 데이터를 읽음
+		FileInputStream inputStream = new FileInputStream(targetFile);
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+
+		String line;
+		StringBuffer sbf = new StringBuffer();
+		int num = 1;
+		while((line = bufferedReader.readLine())!=null) {
+
+			//sbf.append(line+System.getProperty("line.separator"));
+			sbf.append(num + " : " + line + "\n");
+			num++;
+			//sbf.append(line+"\n");
+		}
+
+		bufferedReader.close();
+		inputStream.close();
+
+		return sbf.toString();
+	}
 	public void fileContentShow(File targetFile) throws Exception{
 		//targetFile.canRead();
 
 		if(targetFile == null || !targetFile.isFile()){
 			throw new Exception("파일이 없습니다.");
-		}
-
-		if(targetFile.isFile()){
-			//파일을 바이트 단위로 데이터를 읽음
-			FileInputStream inputStream = new FileInputStream(targetFile);
-			//InputStreamReader reader=new InputStreamReader(inputStream,"UTF-8");
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
-			
+		}else{
 			logger.info("----------------------"+targetFile.getName()+" START-----------------------------");
-			String line;
-			StringBuffer sbf = new StringBuffer();
-			long num = 1;
-			while((line = bufferedReader.readLine())!=null){
-				
-				//sbf.append(line+System.getProperty("line.separator"));
-				sbf.append(num + ":" + line+"\n");
-				num++;
-			}
-			//logger.info(sbf.toString());
-			
-		
-			bufferedReader.close();
-			inputStream.close();
+			logger.info(fileContent(targetFile));
 			logger.info("-------------------------END-------------------------------");
 		}
 	}
 	
-	public void fileContentSearch(String searchTxt,String fileContent) throws Exception{
-		String srchText = "</script>"; 
+	public void fileContentTxtSrch(File targetFile, String searchText,int fileContentIdx) throws Exception{
 
-		long fromIdx = 1;
-		
-		if(fileContent.indexOf(srchText)>=0) {
-			
-			//logger.info(targetFile.getName());
-			logger.info(fileContent.length());
-			logger.info(fileContent.indexOf(srchText));
-			
-			logger.info(srchText.length());
-			
-			fromIdx = fileContent.indexOf(srchText);
+		if(searchText == null ||"".equals(searchText)){
+			throw new Exception("검색어를 입력하시기 바랍니다.");
 		}
-		
+
+		if(targetFile == null || !targetFile.isFile()){
+			throw new Exception("파일이 없습니다.");
+		}else{
+			String fileContent = fileContent(targetFile);
+			logger.info(targetFile.getName()+" : "+ fileContentIdx);
+			if(fileContent.indexOf(searchText,fileContentIdx)>=0) {
+
+				if(fileContentIdx == 0){
+					logger.info("----------------------"+targetFile.getName()+"----------------------------");
+				}
+				int searchIdx = fileContent.indexOf(searchText);
+
+				//fileContent.indexOf(searchIdx)
+				//logger.info(targetFile.getName());
+
+				logger.info(fileContent.substring(fileContent.lastIndexOf("\n",searchIdx),fileContent.indexOf("\n",searchIdx)));
+
+				long fileContentLen = fileContent.length();
+
+				fileContentIdx = searchIdx + searchText.length();
+				if(fileContentIdx < fileContentLen){
+					//폴더일 경우 재귀호출
+					Method method = this.getClass().getDeclaredMethod("fileContentTxtSrch",targetFile.getClass(),searchText.getClass(),int.class);
+					method.invoke(this, targetFile,searchText,fileContentIdx);
+				}
+
+				//logger.info(fileContent.length());
+				//logger.info(fileContent.indexOf(searchText));
+				//logger.info(searchText.length());
+				//fromIdx = fileContent.indexOf(searchText);
+			}
+		}
 	}
 }
