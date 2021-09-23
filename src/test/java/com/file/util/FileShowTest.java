@@ -1,13 +1,11 @@
 package com.file.util;
 
-import com.web.crawling.WebCrawling;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.File;
 
-import static org.junit.Assert.*;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class FileShowTest {
 
@@ -15,6 +13,9 @@ public class FileShowTest {
 
     FileSearch fileSearch = null;
     FileCopy fileCopy = null;
+    
+    Long runnigTime = 0L;
+    
 
     @Before
     public void beforeTest(){
@@ -25,8 +26,19 @@ public class FileShowTest {
         if(fileCopy == null){
             fileCopy = new FileCopy();
         }
+        
+        log.info("---------- START -----------");
+        
+        runnigTime = System.currentTimeMillis();
     }
+    
+    @After
+    public void afterTest(){
 
+    	log.info("---------- END -----------");    	
+    	log.info("running time : "  + (System.currentTimeMillis() - runnigTime) + "ms");
+    }
+    
     //@Test
     public void search(){
         String folderPath ="경로설정";//ex)C:\\eclipse-workspace
@@ -42,7 +54,7 @@ public class FileShowTest {
     }
     
     //@Test
-    public void shoWContent() {
+    public void showContent() {
     	
     	String folderPath ="C:\\Users\\user\\Desktop\\NEW_OS";//ex)C:\\eclipse-workspace
         File files = new File(folderPath);
@@ -75,13 +87,12 @@ public class FileShowTest {
             e.printStackTrace();
             log.error(e.getMessage());
         }
-
     }
 
     @Test
     public void fileContentTxtSrch(){
-        String sourceDir ="경로";//ex)C:\\eclipse-workspace
-        String searchText ="단어";//ex)C:\\eclipse-workspace
+        String sourceDir ="C:\\Users\\user\\Desktop\\작성중\\새 폴더";//ex)C:\\eclipse-workspace
+        String searchText ="텍스트";//ex)텍스트
         File sourceFile = new File(sourceDir);
 
         try {
@@ -97,10 +108,10 @@ public class FileShowTest {
         }
     }
 
-    @Test
+    //@Test
     public void allCopy(){
-        String sourceDir ="원본경로";//ex)C:\\eclipse-workspace
-        String targetDir ="대상경로";//ex)C:\\eclipse-workspace
+        String sourceDir ="C:\\Users\\user\\Desktop\\백업";//ex)C:\\eclipse-workspace
+        String targetDir ="C:\\Users\\user\\Desktop\\개인2";//ex)C:\\eclipse-workspace
         File sourceFile = new File(sourceDir);
 
         try {

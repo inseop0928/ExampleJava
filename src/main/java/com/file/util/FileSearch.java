@@ -28,6 +28,10 @@ public class FileSearch {
 		return files;
 	}
 
+	public int getFilesCnt() {
+		return (files.size()+1);
+	}
+	
 	public void setFiles(List<File> files) {
 		this.files = files;
 	}
@@ -67,7 +71,8 @@ public class FileSearch {
 		while((line = bufferedReader.readLine())!=null) {
 
 			//sbf.append(line+System.getProperty("line.separator"));
-			sbf.append(num + " : " + line + "\n");
+			//sbf.append(num + " : " + line + "\n");
+			sbf.append(line + "\n");
 			num++;
 			//sbf.append(line+"\n");
 		}
@@ -77,6 +82,7 @@ public class FileSearch {
 
 		return sbf.toString();
 	}
+	
 	public void fileContentShow(File targetFile) throws Exception{
 		//targetFile.canRead();
 
@@ -99,24 +105,26 @@ public class FileSearch {
 			throw new Exception("파일이 없습니다.");
 		}else{
 			String fileContent = fileContent(targetFile);
-			logger.info(targetFile.getName()+" : "+ fileContentIdx);
+			long fileContentLen = fileContent.length();
+			
+			//logger.info(targetFile.getName()+" : "+ fileContentIdx);
+						
 			if(fileContent.indexOf(searchText,fileContentIdx)>=0) {
 
 				if(fileContentIdx == 0){
-					logger.info("----------------------"+targetFile.getName()+"----------------------------");
+					logger.info("----------------------"+targetFile.getName()+" : " + fileContentLen +"----------------------------");
 				}
-				int searchIdx = fileContent.indexOf(searchText);
+				int searchIdx = fileContent.indexOf(searchText,fileContentIdx);
 
-				//fileContent.indexOf(searchIdx)
-				//logger.info(targetFile.getName());
-
-				logger.info(fileContent.substring(fileContent.lastIndexOf("\n",searchIdx),fileContent.indexOf("\n",searchIdx)));
-
-				long fileContentLen = fileContent.length();
+				
+				String line = (fileContent.substring(0, searchIdx).split("\n").length +1) + " : ";
+				
+				logger.info( line +  fileContent.substring(fileContent.lastIndexOf("\n",searchIdx),fileContent.indexOf("\n",searchIdx)));
 
 				fileContentIdx = searchIdx + searchText.length();
+				
+				//끝이아닐경우 재귀 호출
 				if(fileContentIdx < fileContentLen){
-					//폴더일 경우 재귀호출
 					Method method = this.getClass().getDeclaredMethod("fileContentTxtSrch",targetFile.getClass(),searchText.getClass(),int.class);
 					method.invoke(this, targetFile,searchText,fileContentIdx);
 				}
