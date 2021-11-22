@@ -27,16 +27,16 @@ public class WebConnectionTest {
 			try { 
 				
 				URL obj = new URL(ip); 
-				// 호출할 url 
+				// ????? url 
 				HttpURLConnection con = (HttpURLConnection)obj.openConnection(); con.setRequestMethod("GET");
 				
-				con.setConnectTimeout(1500);//타임아웃시간
+				con.setConnectTimeout(1500);//??????ð?
 
 				in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
 //				System.out.println(ip + " : O");
 				String line; 
 				while((line = in.readLine()) != null) { 
-					// response를 차례대로 출력 
+					// response?? ?????? ??? 
 					System.out.println(line); 
 				} 
 			}catch(ConnectException e) {
